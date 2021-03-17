@@ -1,0 +1,67 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+        <!-- Add todo Modal -->
+    <div class="modal fade" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add Todo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-2" action="addtodo" method="POST">
+                  {% csrf_token %}
+                    <div class="col-auto">
+                        <input class="form-control me-1" type="text" placeholder="What you need to do?" name="addtodoval" autocomplete="off" required>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+     
+    <div class="container">
+        <h3>Todo List:</h3>
+        <br>
+        <table class="table table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Todo</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody class="todoActions">
+
+            {% for todo in todos %}
+              <tr>
+                  {% if todo.isCompleted == True %}
+                    <td>Completed</td>
+                    <th scope="row" style="text-decoration-line: line-through">{{todo.todo_name}}</th>
+                  {% else %}
+                    <td>Unfinished</td>
+                    <th>{{todo.todo_name}}</th>
+                  {% endif %}
+                <td>  
+                    <a class="btn btn-sm btn-danger" href="/deletetodo?id={{todo.id}}"> <i class="fa fa-trash-o fa-lg"></i></a>
+                    {% if todo.isCompleted == False %}
+                    <a class="btn btn-sm btn-primary" href="/edittodo?id={{todo.id}}"><i class="fa fa-check" aria-hidden="true"></i></a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% endblock %}
